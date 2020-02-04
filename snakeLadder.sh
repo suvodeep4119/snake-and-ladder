@@ -7,3 +7,11 @@ echo "Welcome to THE SNAKE AND LADDER GAME"
 
 #VARIABLES
 playerPosition=0
+
+#FUNCTIONS
+
+function rollDie()
+{
+   dieValue=$(( (RANDOM%6)+1 ))
+}
+rollDie
