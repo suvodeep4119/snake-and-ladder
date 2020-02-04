@@ -2,7 +2,7 @@
 echo "Welcome to THE SNAKE AND LADDER GAME"
 
 #CONSTANTS
-#NO_OF_PLAYERS=1 #Just a comment not a constant
+NO_OF_PLAYERS=2 #Just a comment not a constant
 NO_PLAY=0
 SNAKE=1
 LADDER=2
@@ -49,13 +49,18 @@ function constraints()
 	
 	if (( playerPosition > $WINNING_POSITION ))
 	then
-   playerPosition=$(( $playerPosition-$dieValue ))
+   	playerPosition=$(( $playerPosition-$dieValue ))
 	fi
 	echo recordPosition[$dieCounter]=$playerPosition
 }
 
 #MAIN
-until (( $playerPosition == $WINNING_POSITION ))
+for ((i=0; i<$NO_OF_PLAYERS; i++ )) #Wrong loop
 do
-	playerMove
+	until (( $playerPosition == $WINNING_POSITION ))
+	do
+		echo "Player: " $(($i+1))
+		playerMove
+	done
 done
+echo "Winner: " $i
