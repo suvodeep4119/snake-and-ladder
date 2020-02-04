@@ -8,14 +8,19 @@ SNAKE=1
 LADDER=2
 WINNING_POSITION=100
 
+#DICTIONARY
+declare -A recordPosition
+
 #VARIABLES
 playerPosition=0
+dieCounter=0
 
 #FUNCTIONS
 
 function rollDie()
 {
    dieValue=$(( (RANDOM%6)+1 ))
+	((dieCounter++))
 }
 
 function playerMove()
@@ -46,8 +51,10 @@ function constraints()
 	then
    playerPosition=$(( $playerPosition-$dieValue ))
 	fi
-
+	echo recordPosition[$dieCounter]=$playerPosition
 }
+
+#MAIN
 until (( $playerPosition == $WINNING_POSITION ))
 do
 	playerMove
