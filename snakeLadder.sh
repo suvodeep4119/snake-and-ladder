@@ -6,7 +6,7 @@ echo "Welcome to THE SNAKE AND LADDER GAME"
 NO_PLAY=0
 SNAKE=1
 LADDER=2
-
+WINNING_POSITION=100
 
 #VARIABLES
 playerPosition=0
@@ -32,6 +32,17 @@ function playerMove()
 	      playerPosition=$(($playerPosition+$dieValue))
 	      ;;
 	esac
+	constraints
 }
 
-playerMove
+function constraints()
+{
+	if (( $playerPosition < 0 ))
+	then
+		playerPosition=0
+	fi
+}
+until (( $playerPosition == $WINNING_POSITION ))
+do
+	playerMove
+done
