@@ -41,6 +41,12 @@ function constraints()
 	then
 		playerPosition=0
 	fi
+	
+	if (( playerPosition > $WINNING_POSITION ))
+	then
+   playerPosition=$(( $playerPosition-$dieValue ))
+	fi
+
 }
 until (( $playerPosition == $WINNING_POSITION ))
 do
