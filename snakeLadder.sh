@@ -6,7 +6,7 @@ echo "Welcome to THE SNAKE AND LADDER GAME for 2 players"
 NO_PLAY=0
 SNAKE=1
 LADDER=2
-WINNING_POSITION=12
+WINNING_POSITION=100
 
 #DICTIONARY
 declare -A recordPositionO
