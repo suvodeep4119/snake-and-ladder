@@ -1,66 +1,122 @@
 #!/bin/bash -x
-echo "Welcome to THE SNAKE AND LADDER GAME"
+echo "Welcome to THE SNAKE AND LADDER GAME for 2 players"
 
 #CONSTANTS
-NO_OF_PLAYERS=2 #Just a comment not a constant
+
 NO_PLAY=0
 SNAKE=1
 LADDER=2
-WINNING_POSITION=100
+WINNING_POSITION=12
 
 #DICTIONARY
-declare -A recordPosition
+declare -A recordPositionO
+declare -A recordPositionT
 
 #VARIABLES
-playerPosition=0
-dieCounter=0
+playerPositionOne=0
+playerPositionTwo=0
+dieCounterO=0
+dieCounterT=0
 
 #FUNCTIONS
 
 function rollDie()
 {
    dieValue=$(( (RANDOM%6)+1 ))
-	((dieCounter++))
+   echo "Die value: $dieValue"
 }
 
-function playerMove()
+function playerMoveO()
 {
 	rollDie
-	case $((RANDOM%3)) in
+    (( dieCounterO++ ))
+    randomPlayerMove=$((RANDOM%3))
+    echo "Move value generator: $randomPlayerMove"
+	case $randomPlayerMove in
 	   $NO_PLAY)
-	      playerPosition=$playerPosition
+	      playerPositionOne=$playerPositionOne
 	      ;;
 	   $SNAKE)
-	      playerPosition=$(($playerPosition-$dieValue))
+	      playerPositionOne=$(($playerPositionOne-$dieValue))
 	      ;;
 	   $LADDER)
-	      playerPosition=$(($playerPosition+$dieValue))
+	      playerPositionOne=$(($playerPositionOne+$dieValue))
 	      ;;
 	esac
-	constraints
+	constraintsO
+    if (( $playerPositionOne == $WINNING_POSITION ))
+    then
+        echo "p1 won"
+        return 1
+    fi
 }
 
-function constraints()
+function playerMoveT()
 {
-	if (( $playerPosition < 0 ))
+	rollDie
+    (( dieCounterT++ ))
+    randomPlayerMove=$((RANDOM%3))
+    echo "Move value generator: $randomPlayerMove"
+	case $randomPlayerMove in
+	   $NO_PLAY)
+	      playerPositionTwo=$playerPositionTwo
+	      ;;
+	   $SNAKE)
+	      playerPositionTwo=$(($playerPositionTwo-$dieValue))
+	      ;;
+	   $LADDER)
+	      playerPositionTwo=$(($playerPositionTwo+$dieValue))
+	      ;;
+	esac
+	constraintsT
+    if (( $playerPositionTwo == $WINNING_POSITION ))
+    then
+        echo "p2 won"
+        return 2
+    fi
+}
+
+function constraintsO()
+{
+	if (( $playerPositionOne < 0 ))
 	then
-		playerPosition=0
+		playerPositionOne=0
 	fi
 	
-	if (( playerPosition > $WINNING_POSITION ))
+	if (( playerPositionOne > $WINNING_POSITION ))
 	then
-   	playerPosition=$(( $playerPosition-$dieValue ))
+   playerPositionOne=$(( $playerPositionOne-$dieValue ))
 	fi
-	echo recordPosition[$dieCounter]=$playerPosition
+	echo "p1" recordPositionO[$dieCounterO]=$playerPositionOne
+    
+}
+
+function constraintsT()
+{
+	if (( $playerPositionTwo < 0 ))
+	then
+		playerPositionTwo=0
+	fi
+	
+	if (( playerPositionTwo > $WINNING_POSITION ))
+	then
+   playerPositionTwo=$(( $playerPositionTwo-$dieValue ))
+	fi
+	echo "p2" recordPositionT[$dieCounterT]=$playerPositionTwo
+    
 }
 
 #MAIN
-for ((i=0; i<$NO_OF_PLAYERS; i++ )) #Wrong loop
+while :
 do
-	until (( $playerPosition == $WINNING_POSITION ))
-	do
-		echo "Player: " $(($i+1))
-		playerMove
-	done
+	playerMoveO
+    if(( $? == 1 ))
+    then
+        break
+    fi
+    playerMoveT
+    if(( $? == 2 ))
+    then
+        break
+    fi
 done
-echo "Winner: " $i
